@@ -17,7 +17,6 @@ define KernelPackage/can
 	CONFIG_CAN_LEDS=y \
 	CONFIG_CAN_AT91=n \
 	CONFIG_CAN_TI_HECC=n \
-	CONFIG_CAN_MCP251X=n \
 	CONFIG_CAN_BFIN=n \
 	CONFIG_CAN_JANZ_ICAN3=n \
 	CONFIG_PCH_CAN=n \
@@ -28,7 +27,7 @@ define KernelPackage/can
 	CONFIG_CAN_SOFTING=n \
 	CONFIG_CAN_XILINXCAN=n \
 	CONFIG_NET_EMATCH_CANID=n \
-	CONFIG_CAN_DEBUG_DEVICES=n
+	CONFIG_CAN_DEBUG_DEVICES=y
   FILES:=$(LINUX_DIR)/drivers/net/can/can-dev.ko \
 	 $(LINUX_DIR)/net/can/can.ko
   AUTOLOAD:=$(call AutoProbe,can can-dev)
@@ -142,6 +141,19 @@ endef
 
 $(eval $(call KernelPackage,can-flexcan))
 
+define KernelPackage/can-mcp251x
+  TITLE:=Microchip MCP251x CAN controllers
+  KCONFIG:=CONFIG_CAN_MCP251X
+  FILES:=$(LINUX_DIR)/drivers/net/can/spi/mcp251x.ko
+  AUTOLOAD:=$(call AutoProbe,mcp251x)
+  $(call AddDepends/can)
+endef
+
+define KernelPackage/can-mcp251x/description
+  CAN driver for Microchip MCP251x SPI CAN controllers
+endef
+
+$(eval $(call KernelPackage,can-mcp251x))
 
 define KernelPackage/can-usb-ems
   TITLE:=EMS CPC-USB/ARM7 CAN/USB interface
@@ -274,4 +286,6 @@ define KernelPackage/can-c-can-pci/description
 endef
 
 $(eval $(call KernelPackage,can-c-can-pci))
+
+
 
